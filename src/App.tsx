@@ -4,15 +4,19 @@ import './App.css';
 
 import Nav from './components/Nav';
 import Login from './components/Login';
+import Home from './components/Home';
 
 function App() {
 	return (
 		<div className="App">
 			<Router>
+				<Nav />
 				<Switch>
 					<Route exact path="/">
-						<Nav />
 						<Login />
+					</Route>
+					<Route path="/home">
+						<Home />
 					</Route>
 				</Switch>
 			</Router>
