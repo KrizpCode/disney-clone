@@ -1,20 +1,49 @@
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import db from '../firebase';
+
+interface ParamTypes {
+	id: string;
+}
+
+interface Movie {
+	id?: string;
+	backgroundImg?: string;
+	cardImg?: string;
+	description?: string;
+	subTitle?: string;
+	title?: string;
+	titleImg?: string;
+	type?: string;
+}
 
 const Detail = () => {
+	const { id } = useParams<ParamTypes>();
+	const [detailData, setDetailData] = useState<Movie>({});
+
+	useEffect(() => {
+		db.collection('movies')
+			.doc(id)
+			.get()
+			.then((doc) => {
+				if (doc.exists) {
+					setDetailData(doc.data() as Movie);
+				} else {
+					console.log('No such document in firebase 🔥');
+				}
+			})
+			.catch((error: Error) => console.log(`Error getting document: ${error}`));
+	}, [id]);
+
 	return (
 		<Container>
 			<Background>
-				<img
-					src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/49B92C046117E89BC9243A68EE277A3B30D551D4599F23C10BF0B8C1E90AEFB6/scale?width=1440&aspectRatio=1.78&format=jpeg"
-					alt=""
-				/>
+				<img src={detailData.backgroundImg} alt={detailData.title} />
 			</Background>
 
 			<ImageTitle>
-				<img
-					src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/5C647DF3FFBFA343CFEA84AC715148F25F9E86F398B408010CC403E7654FB908/scale?width=1440&aspectRatio=1.78"
-					alt=""
-				/>
+				<img src={detailData.titleImg} alt={detailData.title} />
 			</ImageTitle>
 			<ContentMeta>
 				<Controls>
@@ -36,8 +65,8 @@ const Detail = () => {
 						</div>
 					</GroupWatch>
 				</Controls>
-				<SubTitle>SubTitle</SubTitle>
-				<Description>Description</Description>
+				<SubTitle>{detailData.subTitle}</SubTitle>
+				<Description>{detailData.description}</Description>
 			</ContentMeta>
 		</Container>
 	);

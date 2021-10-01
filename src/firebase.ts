@@ -12,6 +12,17 @@ const firebaseConfig = {
 	appId: process.env.REACT_APP_APP_ID,
 };
 
+export interface Movie {
+	id: string;
+	backgroundImg?: string;
+	cardImg?: string;
+	description?: string;
+	subTitle?: string;
+	title?: string;
+	titleImg?: string;
+	type?: string;
+}
+
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 const db = firebaseApp.firestore();
 const auth = firebase.auth();

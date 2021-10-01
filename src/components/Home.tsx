@@ -33,7 +33,7 @@ const Home = () => {
 	useEffect(() => {
 		db.collection('movies').onSnapshot((snapshot) => {
 			snapshot.docs.forEach((doc) => {
-				switch (doc.data().type) {
+				switch ((doc.data() as Movie).type) {
 					case 'recommend':
 						// recommends.push({ id: doc.id, ...doc.data() });
 						recommends = [...recommends, { id: doc.id, ...doc.data() }];
